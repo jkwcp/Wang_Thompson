@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         database.addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
+                //the header of the JSON data
                 headerTitle = dataSnapshot.child("title").getValue(String.class);
 
 
@@ -61,20 +62,19 @@ public class MainActivity extends AppCompatActivity {
 
                 for(DataSnapshot item : dataSnapshot.getChildren()){
                     String title = item.child("title").getValue(String.class);
+                    String imageUrl = "";
 
-                    /*
-                    Not working !
-                    
-                    JSONObject imageUrl = new JSONObject();
-                    imageUrl = item.child("media").getValue(JSONObject.class);
-                    */
-
-
+                    for (DataSnapshot iUrl : item.child("media").getChildren()){
+                        imageUrl = iUrl.getValue(String.class);
+                    }
                     String date = item.child("published").getValue(String.class);
                     String author = item.child("author").getValue(String.class);
-                    //FeedItem feedItem = new FeedItem(title, imageUrl, date, author);
-                    headerTitle = date;
-                    setTitle(headerTitle);
+                    FeedItem feedItem = new FeedItem(title, imageUrl, date, author);
+
+                    //item list
+                    itemList.add(feedItem);
+
+
                 }
             }
 
